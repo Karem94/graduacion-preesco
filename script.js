@@ -116,3 +116,98 @@ style.innerHTML = `
   }
 }`;
 document.head.appendChild(style);
+// =========================
+// 🎵 MÚSICA PRO DISNEY
+// =========================
+
+const music = document.getElementById("music");
+const btn = document.getElementById("soundBtn");
+
+// 🎶 TUS CANCIONES (cambia nombres si quieres)
+const tracks = {
+  inicio: "music.mp3",
+  evento: "music2.mp3",
+  final: "music3.mp3"
+};
+
+let currentTrack = "";
+
+// 🎚️ FADE IN
+function fadeIn(audio) {
+  audio.volume = 0;
+  audio.play();
+
+  let vol = 0;
+  const fade = setInterval(() => {
+    if (vol < 1) {
+      vol += 0.05;
+      audio.volume = vol;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+}
+
+// 🎵 CAMBIAR CANCIÓN
+function changeMusic(track) {
+  if (currentTrack === track) return;
+
+  currentTrack = track;
+  music.src = track;
+  fadeIn(music);
+}
+
+// 🔊 BOTÓN SONIDO
+let active = false;
+
+btn.addEventListener("click", () => {
+  active = !active;
+
+  if (active) {
+    changeMusic(tracks.inicio);
+    btn.innerText = "🔊";
+  } else {
+    music.pause();
+    btn.innerText = "🔇";
+  }
+});
+
+// =========================
+// 🎯 CAMBIO POR SECCIÓN
+// =========================
+window.addEventListener("scroll", () => {
+  const y = window.scrollY;
+
+  if (!active) return;
+
+  if (y < 300) {
+    changeMusic(tracks.inicio);
+  } else if (y < 900) {
+    changeMusic(tracks.evento);
+  } else {
+    changeMusic(tracks.final);
+  }
+});
+
+// =========================
+// ✨ EFECTO DISNEY (MAGIA)
+// =========================
+function magia() {
+  const emojis = ["✨","💖","🌟"];
+
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement("div");
+    el.className = "magic";
+    el.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+
+    el.style.left = Math.random()*100 + "vw";
+    el.style.bottom = "0px";
+
+    document.body.appendChild(el);
+
+    setTimeout(() => el.remove(), 2000);
+  }
+}
+
+// magia cada cierto tiempo
+setInterval(magia, 3000);
